@@ -1,0 +1,44 @@
+public boolean conflit(Vol v2) {
+        double[] inter = this.getIntersectionCoordonnees(this, v2);
+        if(estIntersectionSurSegments(inter, this, v2)) {
+            if (!v2.getDep().getCode().equals(this.getArrv().getCode()) && !v2.getArrv().getCode().equals(this.getDep().getCode())) {
+                if (this.conflitTemps(v2)) {
+                    return true;
+                }
+            }
+            else if (v2.getDep().getCode().equals(this.getArrv().getCode())){
+                int[] min = enMinutes(new int[]{this.getH(), this.getM()}, new int[]{v2.getH(), v2.getM()});
+                if (Math.abs(min[0]+this.getDuree() - min[1])<= 15) {
+                    return true;
+                }
+
+            }
+            else if (v2.getArrv().getCode().equals(this.getDep().getCode())) {
+                int[] min = enMinutes(new int[]{this.getH(), this.getM()}, new int[]{v2.getH(), v2.getM()});
+                if (Math.abs(min[0] - min[1]+v2.getDuree() )<= 15) {
+                    return true;
+                }
+
+            }
+            else if (v2.getArrv().getCode().equals(this.getArrv().getCode()) && v2.getDep().getCode().equals(this.getDep().getCode())){
+                return true;
+
+            }
+            else if (v2.getArrv().getCode().equals(this.getArrv().getCode()) ){
+                int[] min = enMinutes(new int[]{this.getH(), this.getM()}, new int[]{v2.getH(), v2.getM()});
+                if (Math.abs(min[0]+this.getDuree() - min[1]+v2.getDuree())<= 15) {
+                    return true;
+                }
+
+            }
+            else if (v2.getDep().getCode().equals(this.getDep().getCode())){
+                int[] min = enMinutes(new int[]{this.getH(), this.getM()}, new int[]{v2.getH(), v2.getM()});
+                if (Math.abs(min[0] - min[1])<= 15) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+        return false;
+    }
