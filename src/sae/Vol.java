@@ -120,38 +120,54 @@ public class Vol {
 
     public boolean conflit(Vol v2) {
         double[] inter = this.getIntersectionCoordonnees(this, v2);
-            if (!v2.getDep().getCode().equals(this.getArrv().getCode()) && !v2.getArrv().getCode().equals(this.getDep().getCode())) {
+
+            if (!v2.getDep().getCode().equals(this.getArrv().getCode()) && !v2.getArrv().getCode().equals(this.getDep().getCode()) && !v2.getDep().getCode().equals(this.getDep().getCode()) && !v2.getArrv().getCode().equals(this.getArrv().getCode())){
                 if (this.conflitTemps(v2)) {
                     return true;
                 }
             }
-            else if (v2.getDep().getCode().equals(this.getArrv().getCode())){
+
+            else if (v2.getDep().getCode().equals(this.getArrv().getCode()) && v2.getArrv().getCode().equals(this.getDep().getCode())){
                 int[] min = enMinutes(new int[]{this.getH(), this.getM()}, new int[]{v2.getH(), v2.getM()});
-                if (Math.abs(min[0]+this.getDuree() - min[1])<= 15) {
+                double dv = compDistanceBetweenPoints(this.getDep().getX(), this.getDep().getY(), this.getArrv().getX(), this.getArrv().getY())/2;
+                double temps_pour_atteindre_this = (dv / this.getVitesse());
+                double temps_pour_atteindre_v2 = (dv / v2.getVitesse());
+                if (Math.abs((min[0]+this.getDuree()) - min[1])<= 15 || Math.abs(min[0] - (min[1]+v2.getDuree()) )<= 15 || Math.abs((min[0]+temps_pour_atteindre_this) - (min[1]+temps_pour_atteindre_v2))<= 15) {
                     return true;
                 }
 
             }
+
+            else if (v2.getDep().getCode().equals(this.getArrv().getCode())){
+                int[] min = enMinutes(new int[]{this.getH(), this.getM()}, new int[]{v2.getH(), v2.getM()});
+                if (Math.abs((min[0]+this.getDuree()) - min[1])<= 15) {
+                    return true;
+                }
+
+            }
+
             else if (v2.getArrv().getCode().equals(this.getDep().getCode())) {
 
                 int[] min = enMinutes(new int[]{this.getH(), this.getM()}, new int[]{v2.getH(), v2.getM()});
 
-                if (Math.abs(min[0] - min[1]+v2.getDuree() )<= 15) {
+                if (Math.abs(min[0] - (min[1]+v2.getDuree()) )<= 15) {
                     return true;
                 }
 
             }
+
             else if (v2.getArrv().getCode().equals(this.getArrv().getCode()) && v2.getDep().getCode().equals(this.getDep().getCode())){
                 return true;
-
             }
+
             else if (v2.getArrv().getCode().equals(this.getArrv().getCode()) ){
                 int[] min = enMinutes(new int[]{this.getH(), this.getM()}, new int[]{v2.getH(), v2.getM()});
-                if (Math.abs(min[0]+this.getDuree() - min[1]+v2.getDuree())<= 15) {
+                if (Math.abs((min[0]+this.getDuree()) - (min[1]+v2.getDuree()))<= 15) {
                     return true;
                 }
 
             }
+
             else if (v2.getDep().getCode().equals(this.getDep().getCode())){
                 int[] min = enMinutes(new int[]{this.getH(), this.getM()}, new int[]{v2.getH(), v2.getM()});
                 if (Math.abs(min[0] - min[1])<= 15) {
@@ -177,38 +193,6 @@ public class Vol {
             return new double[]{x, y};
         }
         return null;
-    }
-    public boolean estIntersectionSurSegments(double[] intersection, Vol v1, Vol v2) {
-        if(intersection!=null){
-            double x = intersection[0];
-            double y = intersection[1];
-
-            double minX1 = Math.min(v1.getDep().getX(), v1.getArrv().getX());
-            double maxX1 = Math.max(v1.getDep().getX(), v1.getArrv().getX());
-            double minY1 = Math.min(v1.getDep().getY(), v1.getArrv().getY());
-            double maxY1 = Math.max(v1.getDep().getY(), v1.getArrv().getY());
-
-            double minX2 = Math.min(v2.getDep().getX(), v2.getArrv().getX());
-            double maxX2 = Math.max(v2.getDep().getX(), v2.getArrv().getX());
-            double minY2 = Math.min(v2.getDep().getY(), v2.getArrv().getY());
-            double maxY2 = Math.max(v2.getDep().getY(), v2.getArrv().getY());
-
-            if (x >= minX1 && x <= maxX1 && y >= minY1 && y <= maxY1 && x >= minX2 && x <= maxX2 && y >= minY2 && y <= maxY2) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public class Point {
-        public double x;
-        public double y;
-
-        public Point(double x, double y) {
-            this.x = x;
-            this.y = y;
-        }
     }
 
 
