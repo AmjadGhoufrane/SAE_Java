@@ -17,14 +17,20 @@ import java.util.Scanner;
  */
 public class Graphegen {
 
+    private final String fv;
     Graph graph = new SingleGraph("");
+
+    private int cpt_conflits = 0;
     private Aeroport[] taba;
+
+    private Aeroport[] tabavc;
     private Vol[] tabv;
     private int nbaeroports, nbvols;
 
     public Graphegen(String nFichierA, String nFichierV) {
         this.taba = chargerAeroports(nFichierA);
         this.tabv = chargerVols(nFichierV);
+        this.fv = nFichierV;
     }
 
     private Aeroport trouverAero(String na) {
@@ -45,9 +51,10 @@ public class Graphegen {
                         !graph.getNode(v1.getIdVol()).hasEdgeBetween(v2.getIdVol())
 
         ) {
-            System.out.println(v1.getDep().getCode() + "-" + v1.getArrv().getCode() + " en conflit avec " + v2.getDep().getCode() + "-" + v2.getArrv().getCode());
+//            System.out.println(v1.getDep().getCode() + "-" + v1.getArrv().getCode() + " en conflit avec " + v2.getDep().getCode() + "-" + v2.getArrv().getCode());
 
             graph.addEdge(v1.getIdVol() + v2.getIdVol(), v1.getIdVol(), v2.getIdVol());
+            cpt_conflits++;
         }
     }
 
@@ -77,7 +84,8 @@ public class Graphegen {
             while (scanner.hasNextLine()) {
                 String cour = scanner.nextLine();
                 String[] split_cour = cour.split(";");
-                tab[i] = new Aeroport(split_cour[0], split_cour[1], Integer.valueOf(split_cour[2]), Integer.valueOf(split_cour[3]), Integer.valueOf(split_cour[4]), Integer.valueOf(split_cour[6]), Integer.valueOf(split_cour[7]), Integer.valueOf(split_cour[8]),split_cour[5].charAt(0),split_cour[9].charAt(0));
+                Aeroport a = new Aeroport(split_cour[0], split_cour[1], Integer.valueOf(split_cour[2]), Integer.valueOf(split_cour[3]), Integer.valueOf(split_cour[4]), Integer.valueOf(split_cour[6]), Integer.valueOf(split_cour[7]), Integer.valueOf(split_cour[8]),split_cour[5].charAt(0),split_cour[9].charAt(0));;
+                tab[i] = a;
                 i++;
             }
             scanner.close();
@@ -106,6 +114,7 @@ public class Graphegen {
 
     public Vol[] chargerVols(String nom_fichier) {
         Vol[] tab = new Vol[compteVols(nom_fichier)];
+        tabavc = new Aeroport[compteVols(nom_fichier)];
         try {
             FileInputStream file = new FileInputStream(nom_fichier);
             Scanner scanner = new Scanner(file);
@@ -114,6 +123,7 @@ public class Graphegen {
                 String cour = scanner.nextLine();
                 String[] split_cour = cour.split(";");
                 tab[i] = new Vol(split_cour[0], this.trouverAero(split_cour[1]), this.trouverAero(split_cour[2]), Integer.valueOf(split_cour[3]), Integer.valueOf(split_cour[4]), Integer.valueOf(split_cour[5]));
+                tabavc[i] = this.trouverAero(split_cour[1]);
                 i++;
             }
             scanner.close();
@@ -135,17 +145,19 @@ public class Graphegen {
                 }
             }
         }
+        System.out.println("Nombre de conflits "+this.fv+": " + cpt_conflits);
         return graph;
     }
 
-    public class Point {
-        public double x;
-        public double y;
 
-        public Point(double x, double y) {
-            this.x = x;
-            this.y = y;
-        }
+    public Aeroport[] getTaba() {
+        return taba;
+    }
+    public Aeroport[] getTabavc() {
+        return tabavc;
     }
 
+    public Vol[] getTabvol() {
+        return tabv;
+    }
 }

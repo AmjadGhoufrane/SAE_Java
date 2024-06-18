@@ -92,5 +92,21 @@ public class Aeroport {
         return y;
     }
 
-
+    @Override
+    public String toString() {
+        return "Aeroport{" +
+                "code='" + code + '\'' +
+                ", Ville='" + Ville + '\'' +
+                ", d1=" + d1 +
+                ", m1=" + m1 +
+                ", s1=" + s1 +
+                ", d2=" + d2 +
+                ", m2=" + m2 +
+                ", s2=" + s2 +
+                ", lat=" + lat +
+                ", longi=" + longi +
+                ", x=" + x +
+                ", y=" + y +
+                '}';
+    }
 }

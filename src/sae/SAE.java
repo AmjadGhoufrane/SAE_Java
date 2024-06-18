@@ -4,7 +4,7 @@
  */
 package sae;
 
-import org.graphstream.graph.Graph;
+import vue.MapViewerPanel;
 
 /**
  * @author iuseh
@@ -13,9 +13,17 @@ public class SAE {
 
 
     public static void main(String[] args) {
-        Graphegen g = new Graphegen("aeroports.txt", "Data_Test/vol-test3.csv");
-        Graph graph = g.genGraph();
-        graph.display();
+//        Graphegen g = new Graphegen("aeroports.txt", "Data_Test/vol-test4.csv");
+//        Graph graph = g.genGraph();
+//        graph.display();
+        MapViewerPanel mapViewerPanel = new MapViewerPanel();
+        mapViewerPanel.visualize();
+
+
+//        for (int i = 0; i <= 9; i++) {
+//            Graphegen g = new Graphegen("aeroports.txt", "Data_Test/vol-test"+i+".csv");
+//            Graph graph = g.genGraph();
+//        }
 
 
     }
