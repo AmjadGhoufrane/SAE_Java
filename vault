@@ -1,155 +1,23 @@
-package vue;
-
-import org.jxmapviewer.JXMapViewer;
-import org.jxmapviewer.OSMTileFactoryInfo;
-import org.jxmapviewer.viewer.*;
-import sae.Aeroport;
-import sae.Graphegen;
-
-import javax.swing.*;
-import java.awt.*;
-import java.util.HashSet;
-import java.util.Set;
-
-public class MapViewerPanel extends JPanel {
-    Graphegen graphegen = new Graphegen("aeroports.txt", "Data_Test/vol-test4.csv");
-    private JXMapViewer mapViewer;
-    private Set<Waypoint> waypoints;
-    private WaypointPainter<Waypoint> waypointPainter;
-
-    public MapViewerPanel() {
-        mapViewer = new JXMapViewer();
-
-        OSMTileFactoryInfo info = new OSMTileFactoryInfo();
-        DefaultTileFactory tileFactory = new DefaultTileFactory(info);
-        mapViewer.setTileFactory(tileFactory);
-
-        GeoPosition france = new GeoPosition(46.603354, 1.888334);
-        mapViewer.setZoom(13);
-        mapViewer.setAddressLocation(france);
-
-        waypoints = new HashSet<>();
-        waypointPainter = new WaypointPainter<>();
-        waypointPainter.setWaypoints(waypoints);
-        mapViewer.setOverlayPainter(waypointPainter);
-
-        setLayout(new BorderLayout());
-        add(new JScrollPane(mapViewer), BorderLayout.CENTER);
-    }
-
-    public JXMapViewer getMapViewer() {
-        return mapViewer;
-    }
-
-    public void addWaypoint(double latitude, double longitude) {
-        Waypoint waypoint = new DefaultWaypoint(latitude, longitude);
-        waypoints.add(waypoint);
-        waypointPainter.setWaypoints(waypoints);
-        mapViewer.repaint();
-    }
-
-    public void visualize() {
-        JFrame frame = new JFrame("Map Viewer");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800, 600);
-
-        for(Aeroport a : graphegen.getTabavc()) {
-            this.addWaypoint(a.getLat()*(-1), a.getLongi());
-        }
-
-        frame.getContentPane().add(this);
-
-        frame.setVisible(true);
-    }
-
-}
-
-
-
-
-
-
-
-
-package vue;
-
-import org.jxmapviewer.JXMapViewer;
-import org.jxmapviewer.OSMTileFactoryInfo;
-import org.jxmapviewer.viewer.*;
-import sae.Aeroport;
-import sae.Graphegen;
-
-import javax.swing.*;
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-public class MapViewerPanel extends JPanel {
-    Graphegen graphegen = new Graphegen("aeroports.txt", "Data_Test/vol-test4.csv");
-    private JXMapViewer mapViewer;
-    private Set<Waypoint> waypoints;
-    private Set<GeoPosition> airportPositions; // Store airport positions
-    private List<GeoPosition> route; // Store route positions
-    private WaypointPainter<Waypoint> waypointPainter;
-    private RoutePainter routePainter;
-
-    public MapViewerPanel() {
-        mapViewer = new JXMapViewer();
-
-        OSMTileFactoryInfo info = new OSMTileFactoryInfo();
-        DefaultTileFactory tileFactory = new DefaultTileFactory(info);
-        mapViewer.setTileFactory(tileFactory);
-
-        GeoPosition france = new GeoPosition(46.603354, 1.888334);
-        mapViewer.setZoom(13); // Adjust zoom level as needed
-        mapViewer.setAddressLocation(france);
-
-        waypoints = new HashSet<>();
-        airportPositions = new HashSet<>();
-        route = new ArrayList<>();
-
-        waypointPainter = new WaypointPainter<>();
-        waypointPainter.setWaypoints(waypoints);
-
-        routePainter = new RoutePainter(route);
-
-        mapViewer.setOverlayPainter(routePainter);
-        mapViewer.setOverlayPainter(waypointPainter);
-
-        setLayout(new BorderLayout());
-        add(new JScrollPane(mapViewer), BorderLayout.CENTER);
-    }
-
-    public void addAirport(Aeroport a) {
-        GeoPosition position = new GeoPosition(a.getLat()*(-1), a.getLongi());
-        airportPositions.add(position);
-        waypoints.add(new DefaultWaypoint(position));
-    }
-
-    public void addRoute(List<GeoPosition> route) {
-        this.route.clear();
-        this.route.addAll(route);
-        mapViewer.repaint();
-    }
-
-    public void visualize() {
-        JFrame frame = new JFrame("Map Viewer");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800, 600);
-
-        for (Aeroport a : graphegen.getTabavc()) {
-            addAirport(a);
-            System.out.println(a);
-        }
-
-
-        List<GeoPosition> route = new ArrayList<>(airportPositions);
-        addRoute(route);
-
-        frame.getContentPane().add(this);
-
-        frame.setVisible(true);
-    }
-}
+BVE-LBG en conflit avec VAF-RNS
+PGX-VHY en conflit avec UIP-BAE
+PGX-VHY en conflit avec VHY-DOL
+PGX-VHY en conflit avec BOU-BVE
+UIP-BAE en conflit avec CMF-PUF
+UIP-BAE en conflit avec TLS-POX
+LPY-DOL en conflit avec BOU-BVE
+LPY-DOL en conflit avec LBG-LVA
+VAF-RNS en conflit avec RDZ-CDG
+VAF-RNS en conflit avec LSO-TNF
+SNR-EPL en conflit avec AUR-URO
+SNR-EPL en conflit avec NCY-LME
+SNR-EPL en conflit avec CER-BZR
+TLS-BIA en conflit avec CER-BZR
+AUR-URO en conflit avec NCY-LME
+AUR-URO en conflit avec VNE-CFE
+AUR-URO en conflit avec LIG-FNI
+BES-XCR en conflit avec CER-BZR
+ZAO-DNR en conflit avec VNE-CFE
+MCU-MRS en conflit avec VNE-CFE
+MCU-MRS en conflit avec CEQ-PGX
+MPL-DIJ en conflit avec CEQ-PGX
+CER-BZR en conflit avec CEQ-PGX

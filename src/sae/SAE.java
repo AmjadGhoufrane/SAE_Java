@@ -13,10 +13,10 @@ public class SAE {
 
 
     public static void main(String[] args) {
-//        Graphegen g = new Graphegen("aeroports.txt", "Data_Test/vol-test4.csv");
+//        Graphegen g = new Graphegen("aeroports.txt", "Data_Test/vol-test5.csv");
 //        Graph graph = g.genGraph();
 //        graph.display();
-        MapViewerPanel mapViewerPanel = new MapViewerPanel();
+        MapViewerPanel mapViewerPanel = new MapViewerPanel("Data_Test/vol-test2.csv");
         mapViewerPanel.visualize();
 
 

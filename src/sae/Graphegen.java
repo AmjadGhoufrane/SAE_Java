@@ -51,7 +51,7 @@ public class Graphegen {
                         !graph.getNode(v1.getIdVol()).hasEdgeBetween(v2.getIdVol())
 
         ) {
-//            System.out.println(v1.getDep().getCode() + "-" + v1.getArrv().getCode() + " en conflit avec " + v2.getDep().getCode() + "-" + v2.getArrv().getCode());
+            System.out.println(v1.getDep().getCode() + "-" + v1.getArrv().getCode() + " en conflit avec " + v2.getDep().getCode() + "-" + v2.getArrv().getCode());
 
             graph.addEdge(v1.getIdVol() + v2.getIdVol(), v1.getIdVol(), v2.getIdVol());
             cpt_conflits++;

@@ -2,88 +2,82 @@ package vue;
 
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
+import org.jxmapviewer.input.PanMouseInputListener;
+import org.jxmapviewer.input.ZoomMouseWheelListenerCenter;
+import org.jxmapviewer.painter.CompoundPainter;
+import org.jxmapviewer.painter.Painter;
 import org.jxmapviewer.viewer.*;
-import sae.Aeroport;
 import sae.Graphegen;
 import sae.Vol;
 
 import javax.swing.*;
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
+import javax.swing.event.MouseInputListener;
+import java.util.*;
 
-public class MapViewerPanel extends JXMapViewer{
-    private RoutePainter painter;
-    Graphegen graphegen = new Graphegen("aeroports.txt", "Data_Test/vol-test4.csv");
-    private JXMapViewer mapViewer;
-    private Set<Waypoint> waypoints;
-    private WaypointPainter<Waypoint> waypointPainter;
+/**
+ * A simple sample application that shows
+ * a OSM map of Europe containing a route with waypoints
+ * @author Martin Steiger
+ */
+public class MapViewerPanel {
+    Graphegen graphegen;
+    JXMapViewer mapViewer = new JXMapViewer();
 
-    public MapViewerPanel(){
 
-        mapViewer = new JXMapViewer();
+    public MapViewerPanel(String fichier) {
+        this.graphegen = new Graphegen("aeroports.txt", fichier);
+    }
 
-        OSMTileFactoryInfo info = new OSMTileFactoryInfo();
+    public void visualize(){
+
+        // Display the viewer in a JFrame
+        JFrame frame = new JFrame("JXMapviewer2 Example 2");
+        frame.getContentPane().add(mapViewer);
+        frame.setSize(800, 600);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
+
+
+        // Create a TileFactoryInfo for OpenStreetMap
+        TileFactoryInfo info = new OSMTileFactoryInfo();
         DefaultTileFactory tileFactory = new DefaultTileFactory(info);
         mapViewer.setTileFactory(tileFactory);
-
         GeoPosition france = new GeoPosition(46.603354, 1.888334);
-        mapViewer.setZoom(13);
+        mapViewer.setZoom(14);
         mapViewer.setAddressLocation(france);
+        List<Painter<JXMapViewer>> painters = new ArrayList<>();
 
-        waypoints = new HashSet<>();
-        waypointPainter = new WaypointPainter<>();
-        waypointPainter.setWaypoints(waypoints);
-        mapViewer.setOverlayPainter(waypointPainter);
+        MouseInputListener mm = new PanMouseInputListener(mapViewer);
+        mapViewer.addMouseListener(mm);
+        mapViewer.addMouseMotionListener(mm);
+        mapViewer.addMouseWheelListener(new ZoomMouseWheelListenerCenter(mapViewer));
 
-        setLayout(new BorderLayout());
-        add(new JScrollPane(mapViewer), BorderLayout.CENTER);
-    }
 
-    public JXMapViewer getMapViewer() {
-        return mapViewer;
-    }
 
-    // rededfine paint
-    @Override
-    public void paint(Graphics g) {
-        super.paint(g);
-        g.setColor(Color.BLACK);
-        g.drawLine(0, 0, 800, 600);
-    }
 
-    public void addWaypoint(double latitude, double longitude) {
-        Waypoint waypoint = new DefaultWaypoint(latitude, longitude);
-        waypoints.add(waypoint);
-        waypointPainter.setWaypoints(waypoints);
-        mapViewer.repaint();
-    }
+        for(Vol v : this.graphegen.getTabvol()){
+            GeoPosition dep = new GeoPosition(v.getDep().getLat()*(-1), v.getDep().getLongi());
+            GeoPosition arrv = new GeoPosition(v.getArrv().getLat()*(-1), v.getArrv().getLongi());
 
-    public void visualize() {
-        JFrame frame = new JFrame("Map Viewer");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800, 600);
+            List<GeoPosition> track = Arrays.asList(dep,arrv);
+            RoutePainter routePainter = new RoutePainter(track);
 
-        for(Aeroport a : graphegen.getTabavc()) {
-            this.addWaypoint(a.getLat()*(-1), a.getLongi());
+
+            Set<Waypoint> waypoints = new HashSet<Waypoint>(Arrays.asList(
+                    new DefaultWaypoint(dep),
+                    new DefaultWaypoint(arrv)));
+
+            WaypointPainter<Waypoint> waypointPainter = new WaypointPainter<Waypoint>();
+            waypointPainter.setWaypoints(waypoints);
+
+
+            painters.add(routePainter);
+            painters.add(waypointPainter);
         }
 
-        ArrayList<Double[]> tab = new ArrayList<Double[]>();
 
-        for(Vol v : graphegen.getTabvol()) {
-            Double[] d = new Double[]{v.getDep().getLat()*(-1), v.getDep().getLongi(), v.getArrv().getLat()*(-1), v.getArrv().getLongi()};
-            tab.add(d);
-            System.out.println(this.getGraphics() == null);
 
-            System.out.println(d[0] + " " + d[1] + " " + d[2] + " " + d[3]);
-        }
-
-        painter = new RoutePainter(tab);
-        this.setOverlayPainter(painter);
-
-        frame.getContentPane().add(this);
-        frame.setVisible(true);
+        CompoundPainter<JXMapViewer> painter = new CompoundPainter<JXMapViewer>(painters);
+        mapViewer.setOverlayPainter(painter);
     }
-
 }
