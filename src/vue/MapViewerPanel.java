@@ -15,30 +15,30 @@ import javax.swing.event.MouseInputListener;
 import java.util.*;
 
 /**
- * A simple sample application that shows
- * a OSM map of Europe containing a route with waypoints
- * @author Martin Steiger
+ * Visualisation des vols sur une carte.
  */
 public class MapViewerPanel {
     Graphegen graphegen;
     JXMapViewer mapViewer = new JXMapViewer();
 
-
+    /**
+     * Constructeur
+     * @param fichier nom du fichier vols.
+     */
     public MapViewerPanel(String fichier) {
         this.graphegen = new Graphegen("aeroports.txt", fichier);
     }
 
+    /**
+     * Tracé des vols et waypoints + affichage de la carte.
+     */
     public void visualize(){
-
-        // Display the viewer in a JFrame
-        JFrame frame = new JFrame("JXMapviewer2 Example 2");
+        JFrame frame = new JFrame("Carte des vols");
         frame.getContentPane().add(mapViewer);
         frame.setSize(800, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
 
-
-        // Create a TileFactoryInfo for OpenStreetMap
         TileFactoryInfo info = new OSMTileFactoryInfo();
         DefaultTileFactory tileFactory = new DefaultTileFactory(info);
         mapViewer.setTileFactory(tileFactory);
@@ -52,16 +52,13 @@ public class MapViewerPanel {
         mapViewer.addMouseMotionListener(mm);
         mapViewer.addMouseWheelListener(new ZoomMouseWheelListenerCenter(mapViewer));
 
-
-
-
+        // Ajout des waypoints et tracés de vols pour chaque objet vol
         for(Vol v : this.graphegen.getTabvol()){
             GeoPosition dep = new GeoPosition(v.getDep().getLat()*(-1), v.getDep().getLongi());
             GeoPosition arrv = new GeoPosition(v.getArrv().getLat()*(-1), v.getArrv().getLongi());
 
             List<GeoPosition> track = Arrays.asList(dep,arrv);
             RoutePainter routePainter = new RoutePainter(track);
-
 
             Set<Waypoint> waypoints = new HashSet<Waypoint>(Arrays.asList(
                     new DefaultWaypoint(dep),
@@ -70,12 +67,9 @@ public class MapViewerPanel {
             WaypointPainter<Waypoint> waypointPainter = new WaypointPainter<Waypoint>();
             waypointPainter.setWaypoints(waypoints);
 
-
             painters.add(routePainter);
             painters.add(waypointPainter);
         }
-
-
 
         CompoundPainter<JXMapViewer> painter = new CompoundPainter<JXMapViewer>(painters);
         mapViewer.setOverlayPainter(painter);

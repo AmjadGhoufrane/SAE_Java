@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package sae;
 
 import org.graphstream.graph.Graph;
@@ -11,9 +7,8 @@ import org.graphstream.graph.implementations.SingleGraph;
 import java.io.FileInputStream;
 import java.util.Scanner;
 
-
 /**
- * @author iuseh
+ * Lecture de fichier et creation du graphe conflits
  */
 public class Graphegen {
 
@@ -27,12 +22,22 @@ public class Graphegen {
     private Vol[] tabv;
     private int nbaeroports, nbvols;
 
+    /**
+     * Constructeur
+     * @param nFichierA nom du fichier contenant les informations sur les aéroports.
+     * @param nFichierV nom du fichier contenant les informations sur les vols.
+     */
     public Graphegen(String nFichierA, String nFichierV) {
         this.taba = chargerAeroports(nFichierA);
         this.tabv = chargerVols(nFichierV);
         this.fv = nFichierV;
     }
 
+    /**
+     * Recherche d'aéroport par code
+     * @param na code de l'aéroport.
+     * @return aéroport correspondant au code donné.
+     */
     private Aeroport trouverAero(String na) {
         for (Aeroport a : taba) {
             if (a.getCode().equals(na)) {
@@ -42,6 +47,11 @@ public class Graphegen {
         return null;
     }
 
+    /**
+     * Vérification et ajout ou non de conflit entre deux vols
+     * @param v1 premier vol.
+     * @param v2 deuxième vol.
+     */
     private void Intersection(Vol v1, Vol v2) {
         if (
                 (v1.conflit(v2))
@@ -58,6 +68,11 @@ public class Graphegen {
         }
     }
 
+    /**
+     * Compte le nombre d'aéroports dans un fichier
+     * @param nom_fichier nom du fichier aéroports.
+     * @return nombre d'aéroports dans le fichier.
+     */
     private int compteAeroports(String nom_fichier) {
         int cpt = 0;
         try {
@@ -75,6 +90,11 @@ public class Graphegen {
         return cpt;
     }
 
+    /**
+     * Chargement des aéroports à partir d'un fichier
+     * @param nom_fichier nom du fichier aéroports.
+     * @return tableau contenant les aéroports.
+     */
     public Aeroport[] chargerAeroports(String nom_fichier) {
         Aeroport[] tab = new Aeroport[compteAeroports(nom_fichier)];
         try {
@@ -95,6 +115,11 @@ public class Graphegen {
         return tab;
     }
 
+    /**
+     * Compte le nombre de vols dans un fichier
+     * @param nom_fichier nom du fichier vols.
+     * @return nombre de vols dans le fichier.
+     */
     private int compteVols(String nom_fichier) {
         int cpt = 0;
         try {
@@ -112,6 +137,11 @@ public class Graphegen {
         return cpt;
     }
 
+    /**
+     * Charge des vols à partir d'un fichier
+     * @param nom_fichier nom du fichier vols.
+     * @return tableau contenant les vols.
+     */
     public Vol[] chargerVols(String nom_fichier) {
         Vol[] tab = new Vol[compteVols(nom_fichier)];
         tabavc = new Aeroport[compteVols(nom_fichier)];
@@ -133,6 +163,10 @@ public class Graphegen {
         return tab;
     }
 
+    /**
+     * Génération de graphe
+     * @return Le graphe généré.
+     */
     public Graph genGraph() {
         for (Vol v : tabv) {
             Node node = graph.addNode(v.getIdVol());
@@ -149,14 +183,26 @@ public class Graphegen {
         return graph;
     }
 
-
+    /**
+     * Renvoie le tableau des aéroports
+     * @return Le tableau des aéroports.
+     */
     public Aeroport[] getTaba() {
         return taba;
     }
+
+    /**
+     * Renvoie le tableau des aéroports avec conflits
+     * @return Le tableau des aéroports avec conflits.
+     */
     public Aeroport[] getTabavc() {
         return tabavc;
     }
 
+    /**
+     * Renvoie le tableau des vols
+     * @return Le tableau des vols.
+     */
     public Vol[] getTabvol() {
         return tabv;
     }

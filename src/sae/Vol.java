@@ -128,24 +128,36 @@ public class Vol {
     public boolean conflit(Vol v2) {
         double[] inter = this.getIntersectionCoordonnees(this, v2);
 
-        if (!v2.getDep().getCode().equals(this.getArrv().getCode()) && !v2.getArrv().getCode().equals(this.getDep().getCode()) && !v2.getDep().getCode().equals(this.getDep().getCode()) && !v2.getArrv().getCode().equals(this.getArrv().getCode())){
+        if (!v2.getDep().getCode().equals(this.getArrv().getCode())
+                && !v2.getArrv().getCode().equals(this.getDep().getCode())
+                && !v2.getDep().getCode().equals(this.getDep().getCode())
+                && !v2.getArrv().getCode().equals(this.getArrv().getCode())){
+
             if (this.conflitTemps(v2)) {
                 return true;
             }
+
         }
 
-        else if (v2.getArrv().getCode().equals(this.getArrv().getCode()) && v2.getDep().getCode().equals(this.getDep().getCode())){
+        else if (v2.getArrv().getCode().equals(this.getArrv().getCode())
+                && v2.getDep().getCode().equals(this.getDep().getCode())){
+
             int[] min = enMinutes(new int[]{this.getH(), this.getM()}, new int[]{v2.getH(), v2.getM()});
+
             if (diff(min[0], min[1])< 15) {
                 return true;
             }
+
         }
 
-        else if (v2.getDep().getCode().equals(this.getArrv().getCode()) && v2.getArrv().getCode().equals(this.getDep().getCode())){
+        else if (v2.getDep().getCode().equals(this.getArrv().getCode())
+                && v2.getArrv().getCode().equals(this.getDep().getCode())){
+
             int[] min = enMinutes(new int[]{this.getH(), this.getM()}, new int[]{v2.getH(), v2.getM()});
             double dv = compDistanceBetweenPoints(this.getDep().getX(), this.getDep().getY(), this.getArrv().getX(), this.getArrv().getY())/2;
             double temps_pour_atteindre_this = (dv / this.getVitesse());
             double temps_pour_atteindre_v2 = (dv / v2.getVitesse());
+
             if (diff(min[0]+this.getDuree(), min[1])< 15 || diff(min[0], min[1]+v2.getDuree())< 15 || diff(min[0]+(int) temps_pour_atteindre_this, min[1]+(int)temps_pour_atteindre_v2)< 15) {
                 return true;
             }
@@ -153,7 +165,9 @@ public class Vol {
         }
 
         else if (v2.getDep().getCode().equals(this.getArrv().getCode())){
+
             int[] min = enMinutes(new int[]{this.getH(), this.getM()}, new int[]{v2.getH(), v2.getM()});
+
             if (diff(min[0]+this.getDuree(), min[1])< 15) {
 //                System.out.println("" + (min[0]+this.getDuree()) + " " + min[1]);
                 return true;
@@ -173,7 +187,9 @@ public class Vol {
 
 
         else if (v2.getArrv().getCode().equals(this.getArrv().getCode()) ){
+
             int[] min = enMinutes(new int[]{this.getH(), this.getM()}, new int[]{v2.getH(), v2.getM()});
+
             if (diff(min[0]+this.getDuree(), min[1]+v2.getDuree())< 15) {
                 return true;
             }
@@ -181,10 +197,13 @@ public class Vol {
         }
 
         else if (v2.getDep().getCode().equals(this.getDep().getCode())){
+
             int[] min = enMinutes(new int[]{this.getH(), this.getM()}, new int[]{v2.getH(), v2.getM()});
+
             if (diff(min[0], min[1])< 15) {
                 return true;
             }
+            
         }
 
         return false;
