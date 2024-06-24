@@ -11,6 +11,7 @@ import java.util.Scanner;
  * Lecture de fichier et creation du graphe conflits
  */
 public class Graphegen {
+    private boolean output = false;
 
     private final String fv;
     Graph graph = new SingleGraph("");
@@ -61,7 +62,9 @@ public class Graphegen {
                         !graph.getNode(v1.getIdVol()).hasEdgeBetween(v2.getIdVol())
 
         ) {
-            System.out.println(v1.getDep().getCode() + "-" + v1.getArrv().getCode() + " en conflit avec " + v2.getDep().getCode() + "-" + v2.getArrv().getCode());
+            if(output){
+                System.out.println(v1.getDep().getCode() + "-" + v1.getArrv().getCode() + " en conflit avec " + v2.getDep().getCode() + "-" + v2.getArrv().getCode());
+            }
 
             graph.addEdge(v1.getIdVol() + v2.getIdVol(), v1.getIdVol(), v2.getIdVol());
             cpt_conflits++;
@@ -205,5 +208,9 @@ public class Graphegen {
      */
     public Vol[] getTabvol() {
         return tabv;
+    }
+
+    public void setOutput(boolean output) {
+        this.output = output;
     }
 }

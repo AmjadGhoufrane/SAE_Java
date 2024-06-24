@@ -8,7 +8,7 @@ package sae;
  * @author iuseh
  */
 public class Vol {
-
+    public final int tdiff = 15;
     private String idVol;
     private Aeroport dep, arrv;
     private int h, m, t;
@@ -54,53 +54,44 @@ public class Vol {
         return Math.sqrt((y2 - y1) * (y2 - y1) + (x2 - x1) * (x2 - x1));
     }
 
-    private int[] addMinutes(int[] temps, int ma) {
+    private double[] addMinutes(double[] temps, double ma) {
 
-        int h = temps[0];
-        int m = temps[1];
+        double h = temps[0];
+        double m = temps[1];
 
-        int totalM = h * 60 + m + ma;
+        Double totalM = h * 60 + m + ma;
 
-        int nH = (totalM / 60) % 24;
-        int nM = totalM % 60;
+        int nH = totalM.intValue() / 60;
+        double nM = totalM % 60;
 
-        if (nH < 0) {
-            nM += 24;
+        return new double[]{nH, nM};
+    }
+
+    private double diffMinutes(double[] time1, double[] time2) {
+
+        double totM1 = time1[0] * 60 + time1[1];
+        double totM2 = time2[0] * 60 + time2[1];
+
+        if (totM1 < totM2){
+            return totM2 - totM1;
+        }
+        else {
+            return totM1 - totM2;
         }
 
-        return new int[]{nH, nM};
     }
 
-    private int diffMinutes(int[] time1, int[] time2) {
 
-        int totM1 = time1[0] * 60 + time1[1];
-        int totM2 = time2[0] * 60 + time2[1];
+    private double[] enMinutes(double[] time1, double[] time2) {
 
-        int diff = totM2 - totM1;
+        double totM1 = time1[0] * 60 + time1[1];
+        double totM2 = time2[0] * 60 + time2[1];
 
-        return diff;
+
+        return new double[]{totM1, totM2};
     }
 
-    private int diffMinutesm(int[] time1, int[] time2, int m1, int m2) {
-
-        int totM1 = time1[0] * 60 + time1[1] + m1;
-        int totM2 = time2[0] * 60 + time2[1] + m2;
-
-        int diff = totM2 - totM1;
-
-        return diff;
-    }
-
-    private int[] enMinutes(int[] time1, int[] time2) {
-
-        int totM1 = time1[0] * 60 + time1[1];
-        int totM2 = time2[0] * 60 + time2[1];
-
-
-        return new int[]{totM1, totM2};
-    }
-
-    private int diff(int a, int b) {
+    private double diff(double a, double b) {
         if(a > b) {
             return a - b;
         }
@@ -114,24 +105,25 @@ public class Vol {
         }
         double vt1 = this.getVitesse();
         double vt2 = v2.getVitesse();
-        double m_arrv1 = (this.compDistanceBetweenPoints(this.getDep().getX(), this.getDep().getY(), inter[0], inter[1]) * 1) / vt1;
-        double m_arrv2 = (this.compDistanceBetweenPoints(v2.getDep().getX(), v2.getDep().getY(), inter[0], inter[1]) * 1) / vt2;
-        int[] t_arrv1fin = this.addMinutes(new int[]{this.getH(), this.getM()}, (int) m_arrv1);
-        int[] t_arrv2fin = this.addMinutes(new int[]{v2.getH(), v2.getM()}, (int) m_arrv2);
+        double m_arrv1 = (this.compDistanceBetweenPoints(this.getDep().getX(), this.getDep().getY(), inter[0], inter[1])) / vt1;
+        double m_arrv2 = (this.compDistanceBetweenPoints(v2.getDep().getX(), v2.getDep().getY(), inter[0], inter[1])) / vt2;
+        double[] t_arrv1fin = this.addMinutes(new double[]{this.getH(), this.getM()}, m_arrv1);
+        double[] t_arrv2fin = this.addMinutes(new double[]{v2.getH(), v2.getM()}, m_arrv2);
 
-        if (Math.abs(diffMinutes(t_arrv1fin, t_arrv2fin)) < 15) {
+//        System.out.println("This : "+t_arrv1fin[0]+":"+t_arrv1fin[1]+" V2 : "+t_arrv2fin[0]+":"+t_arrv2fin[1]);
+
+        if (diffMinutes(t_arrv1fin, t_arrv2fin) < tdiff) {
             return true;
         }
         return false;
     }
 
     public boolean conflit(Vol v2) {
-        double[] inter = this.getIntersectionCoordonnees(this, v2);
 
         if (!v2.getDep().getCode().equals(this.getArrv().getCode())
                 && !v2.getArrv().getCode().equals(this.getDep().getCode())
                 && !v2.getDep().getCode().equals(this.getDep().getCode())
-                && !v2.getArrv().getCode().equals(this.getArrv().getCode())){
+                && !v2.getArrv().getCode().equals(this.getArrv().getCode())){ // v2 ne part ni de l'aéroport de départ ni de l'aéroport d'arrivée de this
 
             if (this.conflitTemps(v2)) {
                 return true;
@@ -140,67 +132,67 @@ public class Vol {
         }
 
         else if (v2.getArrv().getCode().equals(this.getArrv().getCode())
-                && v2.getDep().getCode().equals(this.getDep().getCode())){
+                && v2.getDep().getCode().equals(this.getDep().getCode())){ // v2 part de l'aéroport de départ de this et arrive à l'aéroport d'arrivée de this
 
-            int[] min = enMinutes(new int[]{this.getH(), this.getM()}, new int[]{v2.getH(), v2.getM()});
+            double[] min = enMinutes(new double[]{this.getH(), this.getM()}, new double[]{v2.getH(), v2.getM()});
 
-            if (diff(min[0], min[1])< 15) {
+            if (diff(min[0], min[1])< tdiff) {
                 return true;
             }
 
         }
 
         else if (v2.getDep().getCode().equals(this.getArrv().getCode())
-                && v2.getArrv().getCode().equals(this.getDep().getCode())){
+                && v2.getArrv().getCode().equals(this.getDep().getCode())){ // v2 part de l'aéroport d'arrivée de this et arrive à l'aéroport de départ de this
 
-            int[] min = enMinutes(new int[]{this.getH(), this.getM()}, new int[]{v2.getH(), v2.getM()});
+            double[] min = enMinutes(new double[]{this.getH(), this.getM()}, new double[]{v2.getH(), v2.getM()});
             double dv = compDistanceBetweenPoints(this.getDep().getX(), this.getDep().getY(), this.getArrv().getX(), this.getArrv().getY())/2;
             double temps_pour_atteindre_this = (dv / this.getVitesse());
             double temps_pour_atteindre_v2 = (dv / v2.getVitesse());
 
-            if (diff(min[0]+this.getDuree(), min[1])< 15 || diff(min[0], min[1]+v2.getDuree())< 15 || diff(min[0]+(int) temps_pour_atteindre_this, min[1]+(int)temps_pour_atteindre_v2)< 15) {
+            if (diff(min[0]+this.getDuree(), min[1])< tdiff || diff(min[0], min[1]+v2.getDuree())< tdiff || diff(min[0]+(temps_pour_atteindre_this), min[1]+(temps_pour_atteindre_v2))< tdiff) {
                 return true;
             }
 
         }
 
-        else if (v2.getDep().getCode().equals(this.getArrv().getCode())){
+        else if (v2.getDep().getCode().equals(this.getArrv().getCode())){ // v2 part de l'aéroport d'arrivée de this
 
-            int[] min = enMinutes(new int[]{this.getH(), this.getM()}, new int[]{v2.getH(), v2.getM()});
+            double[] min = enMinutes(new double[]{this.getH(), this.getM()}, new double[]{v2.getH(), v2.getM()});
 
-            if (diff(min[0]+this.getDuree(), min[1])< 15) {
+            if (diff(min[0]+this.getDuree(), min[1])< tdiff) {
 //                System.out.println("" + (min[0]+this.getDuree()) + " " + min[1]);
                 return true;
             }
 
         }
 
-        else if (v2.getArrv().getCode().equals(this.getDep().getCode())) {
+        else if (v2.getArrv().getCode().equals(this.getDep().getCode())) {   // v2 arrive à l'aéroport de départ de this
 
-            int[] min = enMinutes(new int[]{this.getH(), this.getM()}, new int[]{v2.getH(), v2.getM()});
+            double[] min = enMinutes(new double[]{this.getH(), this.getM()}, new double[]{v2.getH(), v2.getM()});
 
-            if (diff(min[0], min[1]+v2.getDuree())< 15) {
+            if (diff(min[0], min[1]+v2.getDuree())< tdiff) {
                 return true;
             }
 
         }
 
 
-        else if (v2.getArrv().getCode().equals(this.getArrv().getCode()) ){
+        else if (v2.getArrv().getCode().equals(this.getArrv().getCode()) ){ // v2 arrive à l'aéroport d'arrivée de this
 
-            int[] min = enMinutes(new int[]{this.getH(), this.getM()}, new int[]{v2.getH(), v2.getM()});
+            double[] min = enMinutes(new double[]{this.getH(), this.getM()}, new double[]{v2.getH(), v2.getM()});
 
-            if (diff(min[0]+this.getDuree(), min[1]+v2.getDuree())< 15) {
+            if (diff(min[0]+this.getDuree(), min[1]+v2.getDuree())< tdiff) {
                 return true;
             }
 
         }
 
-        else if (v2.getDep().getCode().equals(this.getDep().getCode())){
+        else if (v2.getDep().getCode().equals(this.getDep().getCode())){ // v2 part de l'aéroport de départ de this
 
-            int[] min = enMinutes(new int[]{this.getH(), this.getM()}, new int[]{v2.getH(), v2.getM()});
+            double[] min = enMinutes(new double[]{this.getH(), this.getM()}, new double[]{v2.getH(), v2.getM()});
 
-            if (diff(min[0], min[1])< 15) {
+            if (diff(min[0], min[1])< tdiff) {
                 return true;
             }
             
