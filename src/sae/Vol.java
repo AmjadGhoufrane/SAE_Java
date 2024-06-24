@@ -4,9 +4,7 @@
  */
 package sae;
 
-/**
- * @author iuseh
- */
+
 public class Vol {
     public final int tdiff = 15;
     private String idVol;
@@ -123,7 +121,7 @@ public class Vol {
         if (!v2.getDep().getCode().equals(this.getArrv().getCode())
                 && !v2.getArrv().getCode().equals(this.getDep().getCode())
                 && !v2.getDep().getCode().equals(this.getDep().getCode())
-                && !v2.getArrv().getCode().equals(this.getArrv().getCode())){ // v2 ne part ni de l'aéroport de départ ni de l'aéroport d'arrivée de this
+                && !v2.getArrv().getCode().equals(this.getArrv().getCode())){
 
             if (this.conflitTemps(v2)) {
                 return true;
@@ -132,7 +130,7 @@ public class Vol {
         }
 
         else if (v2.getArrv().getCode().equals(this.getArrv().getCode())
-                && v2.getDep().getCode().equals(this.getDep().getCode())){ // v2 part de l'aéroport de départ de this et arrive à l'aéroport d'arrivée de this
+                && v2.getDep().getCode().equals(this.getDep().getCode())){
 
             double[] min = enMinutes(new double[]{this.getH(), this.getM()}, new double[]{v2.getH(), v2.getM()});
 
@@ -143,7 +141,7 @@ public class Vol {
         }
 
         else if (v2.getDep().getCode().equals(this.getArrv().getCode())
-                && v2.getArrv().getCode().equals(this.getDep().getCode())){ // v2 part de l'aéroport d'arrivée de this et arrive à l'aéroport de départ de this
+                && v2.getArrv().getCode().equals(this.getDep().getCode())){
 
             double[] min = enMinutes(new double[]{this.getH(), this.getM()}, new double[]{v2.getH(), v2.getM()});
             double dv = compDistanceBetweenPoints(this.getDep().getX(), this.getDep().getY(), this.getArrv().getX(), this.getArrv().getY())/2;
@@ -156,7 +154,7 @@ public class Vol {
 
         }
 
-        else if (v2.getDep().getCode().equals(this.getArrv().getCode())){ // v2 part de l'aéroport d'arrivée de this
+        else if (v2.getDep().getCode().equals(this.getArrv().getCode())){
 
             double[] min = enMinutes(new double[]{this.getH(), this.getM()}, new double[]{v2.getH(), v2.getM()});
 
@@ -167,7 +165,7 @@ public class Vol {
 
         }
 
-        else if (v2.getArrv().getCode().equals(this.getDep().getCode())) {   // v2 arrive à l'aéroport de départ de this
+        else if (v2.getArrv().getCode().equals(this.getDep().getCode())) {
 
             double[] min = enMinutes(new double[]{this.getH(), this.getM()}, new double[]{v2.getH(), v2.getM()});
 

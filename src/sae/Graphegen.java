@@ -5,6 +5,7 @@ import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 /**
@@ -54,20 +55,22 @@ public class Graphegen {
      * @param v2 deuxième vol.
      */
     private void Intersection(Vol v1, Vol v2) {
-        if (
-                (v1.conflit(v2))
+        if (v1!=null && v2!=null) {
+            if (
+                    (v1.conflit(v2))
 
-                        &&
+                            &&
 
-                        !graph.getNode(v1.getIdVol()).hasEdgeBetween(v2.getIdVol())
+                            !graph.getNode(v1.getIdVol()).hasEdgeBetween(v2.getIdVol())
 
-        ) {
-            if(output){
-                System.out.println(v1.getDep().getCode() + "-" + v1.getArrv().getCode() + " en conflit avec " + v2.getDep().getCode() + "-" + v2.getArrv().getCode());
+            ) {
+                if(output){
+                    System.out.println(v1.getDep().getCode() + "-" + v1.getArrv().getCode() + " en conflit avec " + v2.getDep().getCode() + "-" + v2.getArrv().getCode());
+                }
+
+                graph.addEdge(v1.getIdVol() + v2.getIdVol(), v1.getIdVol(), v2.getIdVol());
+                cpt_conflits++;
             }
-
-            graph.addEdge(v1.getIdVol() + v2.getIdVol(), v1.getIdVol(), v2.getIdVol());
-            cpt_conflits++;
         }
     }
 
@@ -155,13 +158,41 @@ public class Graphegen {
             while (scanner.hasNextLine()) {
                 String cour = scanner.nextLine();
                 String[] split_cour = cour.split(";");
-                tab[i] = new Vol(split_cour[0], this.trouverAero(split_cour[1]), this.trouverAero(split_cour[2]), Integer.valueOf(split_cour[3]), Integer.valueOf(split_cour[4]), Integer.valueOf(split_cour[5]));
+
+                int a3,a4,a5;
+
+                try {
+                    a3=Integer.valueOf(split_cour[3]);
+                } catch (NumberFormatException e) {
+                    a3=0;
+                }
+                try {
+                    a4=Integer.valueOf(split_cour[4]);
+                } catch (NumberFormatException e) {
+                    a4=0;
+                }
+                try {
+                    a5=Integer.valueOf(split_cour[5]);
+                } catch (NumberFormatException e) {
+                    a5=0;
+                }
+                Aeroport dep,arrv;
+                dep = this.trouverAero(split_cour[1]);
+                arrv = this.trouverAero(split_cour[2]);
+                if (dep == null || arrv == null){
+                    continue;
+                }
+                else{
+                    tab[i] = new Vol(split_cour[0], dep, arrv, a3, a4, a5);
+                }
                 tabavc[i] = this.trouverAero(split_cour[1]);
                 i++;
             }
             scanner.close();
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
         }
         return tab;
     }
@@ -172,13 +203,17 @@ public class Graphegen {
      */
     public Graph genGraph() {
         for (Vol v : tabv) {
-            Node node = graph.addNode(v.getIdVol());
-            node.setAttribute("ui.label", v.getDep().getCode()+"-"+v.getArrv().getCode());
+            if(v != null){
+                Node node = graph.addNode(v.getIdVol());
+                node.setAttribute("ui.label", v.getDep().getCode()+"-"+v.getArrv().getCode());
+            }
         }
         for (Vol v : tabv) {
-            for (Vol vp : tabv) {
-                if (!v.equals(vp)) {
-                    Intersection(v, vp);
+            if (v != null) {
+                for (Vol vp : tabv) {
+                    if (!v.equals(vp)) {
+                        Intersection(v, vp);
+                    }
                 }
             }
         }

@@ -4,9 +4,7 @@
  */
 package sae;
 
-/**
- * @author iuseh
- */
+
 public class Aeroport {
     private String code;
     private String Ville;

@@ -54,21 +54,23 @@ public class MapViewerPanel {
 
         // Ajout des waypoints et tracés de vols pour chaque objet vol
         for(Vol v : this.graphegen.getTabvol()){
-            GeoPosition dep = new GeoPosition(v.getDep().getLat()*(-1), v.getDep().getLongi());
-            GeoPosition arrv = new GeoPosition(v.getArrv().getLat()*(-1), v.getArrv().getLongi());
+            if (v!=null) {
+                GeoPosition dep = new GeoPosition(v.getDep().getLat()*(-1), v.getDep().getLongi());
+                GeoPosition arrv = new GeoPosition(v.getArrv().getLat()*(-1), v.getArrv().getLongi());
 
-            List<GeoPosition> track = Arrays.asList(dep,arrv);
-            RoutePainter routePainter = new RoutePainter(track);
+                List<GeoPosition> track = Arrays.asList(dep,arrv);
+                RoutePainter routePainter = new RoutePainter(track);
 
-            Set<Waypoint> waypoints = new HashSet<Waypoint>(Arrays.asList(
-                    new DefaultWaypoint(dep),
-                    new DefaultWaypoint(arrv)));
+                Set<Waypoint> waypoints = new HashSet<Waypoint>(Arrays.asList(
+                        new DefaultWaypoint(dep),
+                        new DefaultWaypoint(arrv)));
 
-            WaypointPainter<Waypoint> waypointPainter = new WaypointPainter<Waypoint>();
-            waypointPainter.setWaypoints(waypoints);
+                WaypointPainter<Waypoint> waypointPainter = new WaypointPainter<Waypoint>();
+                waypointPainter.setWaypoints(waypoints);
 
-            painters.add(routePainter);
-            painters.add(waypointPainter);
+                painters.add(routePainter);
+                painters.add(waypointPainter);
+            }
         }
 
         CompoundPainter<JXMapViewer> painter = new CompoundPainter<JXMapViewer>(painters);
