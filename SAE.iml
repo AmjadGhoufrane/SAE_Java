@@ -10,7 +10,7 @@
     <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/gs-algo-1.1.2.jar!/" />
+          <root url="jar://$MODULE_DIR$/libs/gs-core-1.1.2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -19,7 +19,7 @@
     <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/gs-core-1.1.2.jar!/" />
+          <root url="jar://$MODULE_DIR$/libs/commons-logging-1.2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -28,7 +28,7 @@
     <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/gs-ui-1.1.2.jar!/" />
+          <root url="jar://$MODULE_DIR$/libs/gs-algo-1.1.2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -37,16 +37,19 @@
     <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/jxmapviewer2-2.8.jar!/" />
-          <root url="jar://$MODULE_DIR$/commons-logging-1.2.jar!/" />
-          <root url="file://$MODULE_DIR$" />
-          <root url="file://$MODULE_DIR$" />
+          <root url="jar://$MODULE_DIR$/libs/gs-ui-1.1.2.jar!/" />
         </CLASSES>
         <JAVADOC />
-        <SOURCES>
-          <root url="file://$MODULE_DIR$/src" />
-        </SOURCES>
-        <jarDirectory url="file://$MODULE_DIR$" recursive="false" />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/jxmapviewer2-2.8.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
       </library>
     </orderEntry>
   </component>

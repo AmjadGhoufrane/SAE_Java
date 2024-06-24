@@ -165,17 +165,26 @@ public class Graphegen {
                     a3=Integer.valueOf(split_cour[3]);
                 } catch (NumberFormatException e) {
                     a3=0;
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    continue;
                 }
+
                 try {
                     a4=Integer.valueOf(split_cour[4]);
                 } catch (NumberFormatException e) {
                     a4=0;
+                }catch (ArrayIndexOutOfBoundsException e) {
+                    continue;
                 }
+
                 try {
                     a5=Integer.valueOf(split_cour[5]);
                 } catch (NumberFormatException e) {
                     a5=0;
+                }catch (ArrayIndexOutOfBoundsException e) {
+                    continue;
                 }
+
                 Aeroport dep,arrv;
                 dep = this.trouverAero(split_cour[1]);
                 arrv = this.trouverAero(split_cour[2]);

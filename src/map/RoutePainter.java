@@ -1,4 +1,4 @@
-package vue;
+package map;
 
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.painter.Painter;

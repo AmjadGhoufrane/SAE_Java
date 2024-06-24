@@ -6,7 +6,7 @@ package main;
 
 import org.graphstream.graph.Graph;
 import sae.Graphegen;
-import vue.MapViewerPanel;
+import map.MapViewerPanel;
 
 public class SAE {
 
@@ -24,10 +24,10 @@ public class SAE {
 
         g.setOutput(false);
 
-        for (int i = 0; i <= 9; i++) {
-            Graphegen gg = new Graphegen("aeroports.txt", "Data_Test/vol-test"+i+".csv");
-            Graph graphe = gg.genGraph();
-        }
+//        for (int i = 0; i <= 9; i++) {
+//            Graphegen gg = new Graphegen("aeroports.txt", "Data_Test/vol-test"+i+".csv");
+//            Graph graphe = gg.genGraph();
+//        }
 
 
     }
