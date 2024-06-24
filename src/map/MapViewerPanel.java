@@ -30,6 +30,14 @@ public class MapViewerPanel {
     }
 
     /**
+     * Constructeur
+     */
+    public MapViewerPanel() {
+    }
+
+
+
+    /**
      * Tracé des vols et waypoints + affichage de la carte.
      */
     public void visualize(){
@@ -75,5 +83,20 @@ public class MapViewerPanel {
 
         CompoundPainter<JXMapViewer> painter = new CompoundPainter<JXMapViewer>(painters);
         mapViewer.setOverlayPainter(painter);
+    }
+
+    public void visualizeVierge(){
+        JFrame frame = new JFrame("Carte des vols");
+        frame.getContentPane().add(mapViewer);
+        frame.setSize(800, 600);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
+
+        TileFactoryInfo info = new OSMTileFactoryInfo();
+        DefaultTileFactory tileFactory = new DefaultTileFactory(info);
+        mapViewer.setTileFactory(tileFactory);
+        GeoPosition france = new GeoPosition(46.603354, 1.888334);
+        mapViewer.setZoom(14);
+        mapViewer.setAddressLocation(france);
     }
 }

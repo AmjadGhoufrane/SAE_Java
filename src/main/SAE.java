@@ -4,8 +4,6 @@
  */
 package main;
 
-import org.graphstream.graph.Graph;
-import sae.Graphegen;
 import map.MapViewerPanel;
 
 public class SAE {
@@ -13,16 +11,15 @@ public class SAE {
 
     public static void main(String[] args) {
         String fichier = "Data_Test/vol-test4-debug.csv";
+//
+//        Graphegen g = new Graphegen("aeroports.txt", fichier);
+//        g.setOutput(true);
+//        Graph graph = g.genGraph();
+//        graph.display();
 
-        Graphegen g = new Graphegen("aeroports.txt", fichier);
-        g.setOutput(true);
-        Graph graph = g.genGraph();
-        graph.display();
+        MapViewerPanel mapViewerPanel = new MapViewerPanel();
+        mapViewerPanel.visualizeVierge();
 
-        MapViewerPanel mapViewerPanel = new MapViewerPanel(fichier);
-        mapViewerPanel.visualize();
-
-        g.setOutput(false);
 
 //        for (int i = 0; i <= 9; i++) {
 //            Graphegen gg = new Graphegen("aeroports.txt", "Data_Test/vol-test"+i+".csv");
