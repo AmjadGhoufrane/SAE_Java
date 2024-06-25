@@ -1,10 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package sae;
 
-
+/**
+ * Aéroport.
+ */
 public class Aeroport {
     private String code;
     private String Ville;
@@ -15,6 +13,19 @@ public class Aeroport {
     private double rTerre = 6371;
     private char orientation1, orientation2;
 
+    /**
+     * Constructeur
+     * @param code  code de l'aéroport.
+     * @param Ville  nom de la ville où se trouve l'aéroport.
+     * @param n1  latitude de l'aéroport.
+     * @param n2  longitude de l'aéroport.
+     * @param n3 altitude de l'aéroport.
+     * @param e1 heure d'ouverture de l'aéroport.
+     * @param e2 heure de fermeture de l'aéroport.
+     * @param e3  nombre de pistes de l'aéroport.
+     * @param o1 orientation de l'aéroport.
+     * @param o2 orientation de l'aéroport.
+     */
     public Aeroport(String code, String Ville, int n1, int n2, int n3, int e1, int e2, int e3,char o1,char o2) {
         this.code = code;
         this.Ville = Ville;
@@ -34,6 +45,12 @@ public class Aeroport {
         this.y = d[1];
     }
 
+    /**
+     * Convertit des coordonnées GPS en coordonnées cartésiennes
+     * @param latitude  latitude à convertir.
+     * @param longitude  longitude à convertir.
+     * @return Un tableau de doubles contenant les coordonnées cartésiennes.
+     */
     private double[] gpsaCartesien(double latitude, double longitude) {
         double latRad = Math.toRadians(latitude);
         double lonRad = Math.toRadians(longitude);
@@ -90,6 +107,9 @@ public class Aeroport {
         return y;
     }
 
+    /**
+     * @return chaîne de caractères représentant l'objet Aeroport.
+     */
     @Override
     public String toString() {
         return "Aeroport{" +

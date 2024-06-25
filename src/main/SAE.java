@@ -20,6 +20,9 @@ public class SAE {
         MapViewerPanel mapViewerPanel = new MapViewerPanel();
         mapViewerPanel.visualizeVierge();
 
+        mapViewerPanel.close();
+
+
 
 //        for (int i = 0; i <= 9; i++) {
 //            Graphegen gg = new Graphegen("aeroports.txt", "Data_Test/vol-test"+i+".csv");

@@ -21,6 +21,8 @@ public class MapViewerPanel {
     Graphegen graphegen;
     JXMapViewer mapViewer = new JXMapViewer();
 
+    JFrame frame = new JFrame("Carte des vols");
+
     /**
      * Constructeur
      * @param fichier nom du fichier vols.
@@ -35,13 +37,10 @@ public class MapViewerPanel {
     public MapViewerPanel() {
     }
 
-
-
     /**
      * Tracé des vols et waypoints + affichage de la carte.
      */
     public void visualize(){
-        JFrame frame = new JFrame("Carte des vols");
         frame.getContentPane().add(mapViewer);
         frame.setSize(800, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -86,7 +85,6 @@ public class MapViewerPanel {
     }
 
     public void visualizeVierge(){
-        JFrame frame = new JFrame("Carte des vols");
         frame.getContentPane().add(mapViewer);
         frame.setSize(800, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -98,5 +96,13 @@ public class MapViewerPanel {
         GeoPosition france = new GeoPosition(46.603354, 1.888334);
         mapViewer.setZoom(14);
         mapViewer.setAddressLocation(france);
+        MouseInputListener mm = new PanMouseInputListener(mapViewer);
+        mapViewer.addMouseListener(mm);
+        mapViewer.addMouseMotionListener(mm);
+        mapViewer.addMouseWheelListener(new ZoomMouseWheelListenerCenter(mapViewer));
+    }
+
+    public void close(){
+        this.frame.setVisible(false);
     }
 }
